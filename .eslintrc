@@ -3,7 +3,8 @@
   "parser": "babel-eslint",
   "root": true,
   "env": {
-    "node": true
+    "node": true,
+    "mocha": true,
   },
   "globals": {},
   "rules": {
@@ -14,5 +15,9 @@
     }],
     "global-require": 0,
     "import/no-unresolved": 0,
+    "no-underscore-dangle": [2, {
+      "allowAfterThis": false,
+      "allow": ["_id"]
+    }],
   }
 }
