@@ -15,6 +15,9 @@ services:
       - ./:/workspace
     entrypoint: npm
 
+  mongo:
+    image: mongo
+
   dev:
     image: node
     working_dir: /workspace
@@ -23,8 +26,23 @@ services:
     entrypoint: npm start
     ports:
       - "3000:3000"
+    depends_on:
+      - mongo
+
+  test:
+    image: node
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    entrypoint: npm run test
+    environment:
+      - MONGO_DB=avrs-test
+    depends_on:
+      - mongo
 
   server:
     build: ./
     ports:
       - "3000:3000"
+    depends_on:
+      - mongo

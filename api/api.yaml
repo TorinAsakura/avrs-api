@@ -1,0 +1,142 @@
+swagger: '2.0'
+info:
+  version: 0.1.0
+  title: Aversis System API
+  license:
+    name: MIT
+basePath: /v1
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /users/register:
+    post:
+      summary: Register user
+      operationId: registerUser
+      tags:
+        - users
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/RegisterUser'
+      responses:
+        '201':
+          description: Auth token
+          schema:
+            $ref: '#/definitions/AuthToken'
+        '422':
+          description: Registration validation error
+          schema:
+            $ref: '#/definitions/RegisterValidationError'
+  /users/auth:
+    post:
+      summary: Auth user
+      operationId: authUser
+      tags:
+        - users
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/AuthUser'
+      responses:
+        '200':
+          description: Auth token
+          schema:
+            $ref: '#/definitions/AuthToken'
+        '422':
+          description: Auth validation error
+          schema:
+            $ref: '#/definitions/AuthValidationError'
+  /users/me:
+    get:
+      summary: Get current user
+      operationId: me
+      tags:
+        - users
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: JWT authorization token
+      responses:
+        '200':
+          description: Current user
+          schema:
+            $ref: '#/definitions/User'
+        '401':
+          description: Unauthorization
+definitions:
+  User:
+    required:
+      - _id
+      - email
+    properties:
+      _id:
+        type: string
+      email:
+        type: string
+  RegisterUser:
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: object
+        required:
+          - value
+          - confirmation
+        properties:
+          value:
+            type: string
+          confirmation:
+            type: string
+  AuthUser:
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  AuthToken:
+    required:
+      - _id
+      - email
+      - token
+    properties:
+      _id:
+        type: string
+      email:
+        type: string
+      token:
+        type: string
+  RegisterValidationError:
+    properties:
+      email:
+        type: object
+        schema:
+          $ref: '#/definitions/ValidationError'
+      password:
+        type: object
+        schema:
+          $ref: '#/definitions/ValidationError'
+  AuthValidationError:
+    properties:
+      email:
+        type: object
+        schema:
+          $ref: '#/definitions/ValidationError'
+  ValidationError:
+    required:
+      - message
+    properties:
+      message:
+        type: string
