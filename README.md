@@ -15,6 +15,12 @@ Start dev server
 docker-compose up dev
 ```
 
+Test
+
+```
+docker-compose run test
+```
+
 Build image
 
 ```

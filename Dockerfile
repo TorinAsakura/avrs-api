@@ -7,6 +7,7 @@ COPY .babelrc /app
 COPY package.json /app
 COPY bin /app/bin
 COPY src /app/src
+COPY api /app/api
 
 RUN npm install --only=prod
 
