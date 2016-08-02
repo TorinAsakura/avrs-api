@@ -9,6 +9,13 @@ pipeline:
     commands:
       - npm run lint
 
+  test:
+    image: node:${NODE_VERSION}
+    environment:
+      - MONGO_HOST=localhost
+    commands:
+      - npm run test
+
   docker:
     image: registry.monstrs.net:5000/drone-docker
     privileged: true
@@ -24,6 +31,11 @@ pipeline:
     timeout: 30
     commands:
       - systemctl restart avrs-api
+
+services:
+  mongo:
+    image: mongo
+    pull: true
 
 matrix:
   NODE_VERSION:
