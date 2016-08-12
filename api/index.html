@@ -45,6 +45,7 @@
       }
       window.swaggerUi = new SwaggerUi({
         url: url,
+        scheme: window.location.protocol,
         dom_id: "swagger-ui-container",
         supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
         onComplete: function(swaggerApi, swaggerUi){
