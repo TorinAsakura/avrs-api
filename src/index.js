@@ -1,5 +1,6 @@
 import path from 'path'
 import Express from 'express'
+import cors from 'cors'
 import bodyParser from 'body-parser'
 import swagger from 'swagger-ui-middleware'
 import serveStatic from 'serve-static'
@@ -20,6 +21,7 @@ app.use(serveStatic(path.resolve(__dirname, '../api')))
 
 swagger.hostUI(app, { path: '/' })
 
+app.use(cors())
 app.use(bodyParser.json())
 app.use(auth.unless(unauthorizedRoutes))
 
