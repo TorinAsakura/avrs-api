@@ -11,4 +11,8 @@ function UnauthorizedError(message = 'Unauthorized') {
 UnauthorizedError.prototype = Object.create(Error.prototype)
 UnauthorizedError.prototype.constructor = UnauthorizedError
 
+UnauthorizedError.prototype.getErrors = function getErrors() {
+  return {}
+}
+
 export default UnauthorizedError

@@ -23,7 +23,7 @@ services:
     working_dir: /workspace
     volumes:
       - ./:/workspace
-    entrypoint: npm start
+    entrypoint: npm run dev
     ports:
       - "3000:3000"
     depends_on:
