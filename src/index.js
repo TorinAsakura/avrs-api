@@ -7,6 +7,7 @@ import serveStatic from 'serve-static'
 import routes from './routes'
 import errorsHandler from './middleware/errorsHandler'
 import auth from './middleware/auth'
+import i18n from './middleware/i18n'
 
 const unauthorizedRoutes = {
   path: [
@@ -21,6 +22,7 @@ app.use(serveStatic(path.resolve(__dirname, '../api')))
 
 swagger.hostUI(app, { path: '/' })
 
+app.use(i18n())
 app.use(cors())
 app.use(bodyParser.json())
 app.use(auth.unless(unauthorizedRoutes))
