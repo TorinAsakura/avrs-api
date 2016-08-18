@@ -1,8 +1,6 @@
-import { lensPath, set } from 'ramda'
-
 const getMessage = errors => `Validation error.\n${errors.map(error => error.message).join('\n')}`
 
-function ValidationError({ errors = [], value }) {
+function ValidationError({ errors = [], value } = {}) {
   const message = getMessage(errors)
 
   Error.call(this, message)
@@ -19,8 +17,8 @@ function ValidationError({ errors = [], value }) {
 ValidationError.prototype = Object.create(Error.prototype)
 ValidationError.prototype.constructor = ValidationError
 
-ValidationError.prototype.toJSON = function toJSON() {
-  return this.errors.reduce((result, error) => set(lensPath(error.path), { message: error.message }, result), {})
+ValidationError.prototype.getErrors = function getErrors() {
+  return this.errors
 }
 
 export default ValidationError

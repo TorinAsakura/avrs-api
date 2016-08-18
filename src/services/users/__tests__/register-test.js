@@ -18,7 +18,7 @@ describe('Register user service', () => {
     try {
       await register({ email: 'invalid@example' })
     } catch (error) {
-      expect(error.toJSON()).to.have.deep.property('email.message')
+      expect(error.getErrors()).to.have.deep.property('[0].path[0]', 'email')
     }
   })
 
@@ -26,32 +26,24 @@ describe('Register user service', () => {
     try {
       await register({ email: 'valid@example.com' })
     } catch (error) {
-      expect(error.toJSON()).to.not.have.property('email')
+      expect(error.getErrors()).to.not.have.deep.property('[0].path[0]', 'email')
     }
   })
 
   it('check invalid password', async () => {
     try {
-      await register({ password: { value: 'unsecured' } })
+      await register({ email: 'valid@example.com', password: { value: 'unsecured' } })
     } catch (error) {
-      expect(error.toJSON()).to.have.deep.property('password.value.message')
-      expect(error.toJSON()).to.have.deep.property('password.confirmation.message')
+      expect(error.getErrors()).to.have.deep.property('[0].path[1]', 'value')
+      expect(error.getErrors()).to.have.deep.property('[1].path[1]', 'confirmation')
     }
   })
 
   it('check invalid password confirmation', async () => {
     try {
-      await register({ password: { value: 'Secured11', confirmation: 'Secured22' } })
+      await register({ email: 'valid@example.com', password: { value: 'Secured11', confirmation: 'Secured22' } })
     } catch (error) {
-      expect(error.toJSON()).to.have.deep.property('password.message')
-    }
-  })
-
-  it('check valid password', async () => {
-    try {
-      await register({ password: { value: 'Secured11', confirmation: 'Secured11' } })
-    } catch (error) {
-      expect(error.toJSON()).to.not.have.property('password')
+      expect(error.getErrors()).to.have.deep.property('[0].path[0]', 'password')
     }
   })
 
@@ -68,7 +60,7 @@ describe('Register user service', () => {
       await register(user)
       await register(user)
     } catch (error) {
-      expect(error.toJSON()).to.have.deep.property('email.message')
+      expect(error.getErrors()).to.have.deep.property('[0].path[0]', 'email')
     }
   })
 
