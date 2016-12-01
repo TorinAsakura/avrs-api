@@ -1,7 +1,13 @@
 /* eslint-disable no-console */
-import app from '../src'
+import { Server as server } from 'http'
+import createApp from '../src'
 
-app.listen(3000, error => {
+const { app, io } = createApp()
+const http = server(app)
+
+io.attach(http)
+
+http.listen(3000, (error) => {
   if (error) {
     throw error
   }

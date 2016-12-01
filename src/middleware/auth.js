@@ -1,32 +1,34 @@
 /* eslint-disable no-param-reassign */
 import unless from 'express-unless'
-import User from '../models/user'
-import verifyToken from '../utils/verifyToken'
-import UnauthorizedError from '../errors/UnauthorizedError'
+import User from '../routes/users/models/user'
+import Activation from '../routes/users/models/activation'
+import verifyToken from '../routes/users/utils/verifyToken'
 
 const auth = async (req, res, next) => {
   const token = req.headers.authorization
 
   if (!token) {
-    return next(new UnauthorizedError())
+    return next()
   }
 
   const payload = await verifyToken(token)
 
   if (!payload) {
-    return next(new UnauthorizedError())
+    return next()
   }
 
-  const user = await User.findOne({ _id: payload._id })
+  const user = await User.findById(payload.id, {
+    include: [{
+      model: Activation,
+      as: 'Activations',
+    }],
+  })
 
   if (!user) {
-    return next(new UnauthorizedError())
+    return next()
   }
 
-  req.user = {
-    _id: user._id,
-    email: user.email,
-  }
+  req.user = user
 
   return next()
 }
