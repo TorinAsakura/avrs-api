@@ -12,8 +12,14 @@ pipeline:
   test:
     image: node:${NODE_VERSION}
     environment:
-      - MONGO_HOST=localhost
+      - DB_HOST=localhost
+      - REDIS_HOST=localhost
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
     commands:
+      - npm run db:drop
+      - npm run db:create
+      - npm run db:migrate
       - npm run test
 
   docker:
@@ -33,10 +39,16 @@ pipeline:
       - systemctl restart avrs-api
 
 services:
-  mongo:
-    image: mongo
+  postgres:
+    image: postgres
+    pull: true
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+  redis:
+    image: redis
     pull: true
 
 matrix:
   NODE_VERSION:
-    - 6
+    - 7

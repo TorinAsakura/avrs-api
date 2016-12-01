@@ -8,26 +8,58 @@ services:
     ports:
       - "8499:80"
 
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+
+  redis:
+    image: redis
+
   npm:
     image: node
     working_dir: /workspace
     volumes:
       - ./:/workspace
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
     entrypoint: npm
+    depends_on:
+      - postgres
 
-  mongo:
-    image: mongo
+  sequelize:
+    image: node
+    working_dir: /workspace
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+    volumes:
+      - ./:/workspace
+    entrypoint: ./node_modules/.bin/sequelize
+
+  mailer:
+    image: avrs-mailer
+    depends_on:
+      - redis
 
   dev:
     image: node
     working_dir: /workspace
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - NODE_ENV=development
     volumes:
       - ./:/workspace
     entrypoint: npm run dev
     ports:
       - "3000:3000"
     depends_on:
-      - mongo
+      - postgres
+      - redis
+      - mailer
 
   test:
     image: node
@@ -36,13 +68,17 @@ services:
       - ./:/workspace
     entrypoint: npm run test
     environment:
-      - MONGO_DB=avrs-test
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - DB_DATABASE=avrs_test
     depends_on:
-      - mongo
+      - postgres
+      - redis
 
   server:
     build: ./
     ports:
       - "3000:3000"
     depends_on:
-      - mongo
+      - postgres
+      - redis

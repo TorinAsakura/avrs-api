@@ -26,7 +26,7 @@ export default function i18nMiddleware() {
     const { normalized } = langs.best(supportedLocales)
 
     req.i18n = {
-      msgFormat: (msgid, values) => {
+      formatMessage: (msgid, values) => {
         const msg = new IntlMessageFormat(gt.dgettext(normalized, msgid), normalized)
 
         return msg.format(values)
