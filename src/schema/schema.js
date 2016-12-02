@@ -106,6 +106,14 @@ const schema = `
     participantId: ID!
   }
 
+  type ExternalSupportRequest {
+    id: ID!,
+    status: String!,
+    email: String!,
+    subject: String!,
+    message: String!
+  }
+
   type TokenResponseType {
     errors: [ValidationErrorType]!,
     token: AuthTokenType
@@ -113,6 +121,11 @@ const schema = `
 
   type ResetUserPasswordResponseType {
     errors: [ValidationErrorType]!
+  }
+
+  type ExternalSupportRequestResponse {
+    errors: [ValidationErrorType]!,
+    request: ExternalSupportRequest
   }
 
   type RootQuery {
@@ -140,7 +153,8 @@ const schema = `
     resetUserPassword (email: String!, resetUrl: String!) : ResetUserPasswordResponseType,
     updateUserPassword (password: PasswordType!, token: String!) : TokenResponseType,
     storeStat (sessionId: ID!, value: String!) : Boolean,
-    buyServicePlan (id: ID!) : ServicePlanType!
+    buyServicePlan (id: ID!) : ServicePlanType!,
+    createExternalSupportRequest (email: String!, subject: String!, message: String!) : ExternalSupportRequestResponse
   }
 
   schema {

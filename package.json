@@ -10,8 +10,8 @@
     "db:create": "node -r babel-register --harmony-async-await bin/create-db",
     "db:drop": "node -r babel-register --harmony-async-await bin/drop-db",
     "db:migrate": "sequelize db:migrate",
-    "lint": "eslint bin src -f table",
-    "test": "eslint bin src -f table"
+    "lint": "eslint bin src test -f table",
+    "test": "npm run db:drop && npm run db:create && npm run db:migrate && node --harmony-async-await node_modules/.bin/ava"
   },
   "repository": {
     "type": "git",
@@ -58,12 +58,25 @@
     "winston": "^2.2.0"
   },
   "devDependencies": {
+    "apollo-client": "^0.5.9",
+    "ava": "^0.17.0",
     "babel-eslint": "^7.1.1",
     "eslint": "^3.2.0",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^2.0.1",
     "eslint-plugin-react": "^6.7.1",
+    "graphql-tag": "^1.1.2",
+    "isomorphic-fetch": "^2.2.1",
     "nodemon": "^1.10.0"
+  },
+  "ava": {
+    "files": [
+      "test/acceptance/public/**/*.js"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
   }
 }
