@@ -11,5 +11,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Invalid email value {actual}"
-msgstr "Невалидный email {actual}"
+msgid "Can't be blank"
+msgstr "Это поле должно быть заполнено."
+
+msgid "Is not a valid email"
+msgstr "Невалидный адрес электронной почты."
+
+msgid "These passwords don't match."
+msgstr "Пароли не совпадают."
+
+msgid "Password must include 6 or more characters, upper and lowercase letters, at least one number."
+msgstr "Пароль должен содержать 6 или больше символов, в верхнем и нижнем регистре и минимум одну цифру."
+
+msgid "Email already exists."
+msgstr "Адрес электронной почты уже зарегистрирован."

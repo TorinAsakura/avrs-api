@@ -1,13 +1,15 @@
-FROM node:6
+FROM node:7
 
 RUN mkdir /app
 WORKDIR /app
 
 COPY .babelrc /app
+COPY .sequelizerc /app
 COPY package.json /app
 COPY bin /app/bin
 COPY src /app/src
-COPY api /app/api
+COPY db /app/db
+COPY locales /app/locales
 
 RUN npm install --only=prod
 

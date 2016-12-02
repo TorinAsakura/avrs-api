@@ -1,9 +1,8 @@
-import mongoose from 'mongoose'
-import { Promise } from 'es6-promise'
+import Sequelize from 'sequelize'
 import config from './config'
 
-mongoose.Promise = Promise
+const { database, username, password, host, dialect } = config.get('db')
 
-const db = mongoose.createConnection(config.db())
+const sequelize = new Sequelize(database, username, password, { host, dialect })
 
-export default db
+export default sequelize
