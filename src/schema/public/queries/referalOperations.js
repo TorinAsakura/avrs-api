@@ -1,4 +1,4 @@
-import { getReferalOperations } from '../../routes/operations/services'
+import { getReferalOperations } from '../../../routes/operations/services'
 
 export default async (_, params, { user, checkAuth }) => {
   checkAuth()

@@ -1,4 +1,4 @@
-import { activate } from '../../routes/users/services'
+import { activate } from '../../../routes/users/services'
 
 export default async (_, { token }) => {
   await activate(token)

@@ -1,5 +1,5 @@
-import { createExternalRequest } from '../../routes/support/services'
-import ValidationErrors from '../../errors/ValidationErrors'
+import { createExternalRequest } from '../../../routes/support/services'
+import ValidationErrors from '../../../errors/ValidationErrors'
 
 export default async (_, { email, subject, message }, { i18n }) => {
   try {

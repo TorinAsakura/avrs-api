@@ -1,5 +1,5 @@
-import { auth } from '../../routes/users/services'
-import generateToken from '../../routes/users/utils/generateToken'
+import { auth } from '../../../routes/users/services'
+import generateToken from '../../../routes/users/utils/generateToken'
 
 export default async (_, params, { i18n }) => {
   try {

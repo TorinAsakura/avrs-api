@@ -1,4 +1,4 @@
-import { storeStat } from '../../routes/sessions/services'
+import { storeStat } from '../../../routes/sessions/services'
 
 export default async (_, { sessionId, value }, { checkAuth }) => {
   checkAuth()
