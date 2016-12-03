@@ -1,4 +1,4 @@
-import { buyServicePlan } from '../../routes/users/services'
+import { buyServicePlan } from '../../../routes/users/services'
 
 export default async (_, { id }, { user, checkAuth }) => {
   checkAuth()

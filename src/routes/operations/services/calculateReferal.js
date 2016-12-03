@@ -57,12 +57,12 @@ export default async (rentalOperation) => {
       User.update(
         { balance: db.literal(`balance + ${amount}`) },
         { where: { id: userId } },
-        { transaction }
+        { transaction },
       )
 
     return Promise.all(
       operations.map(updateBalance)
-                .concat([ReferalOperation.bulkCreate(operations, { transaction })])
+                .concat([ReferalOperation.bulkCreate(operations, { transaction })]),
     )
   })
 }
