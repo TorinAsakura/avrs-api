@@ -38,6 +38,10 @@ const User = db.define('user', {
       return randomString(10)
     },
   },
+  isAdmin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
   schedule: {
     type: Sequelize.JSON,
     defaultValue: function () {

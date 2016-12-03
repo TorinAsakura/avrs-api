@@ -5,6 +5,7 @@ import resetUserPassword from './resetUserPassword'
 import updateUserPassword from './updateUserPassword'
 import storeStat from './storeStat'
 import buyServicePlan from './buyServicePlan'
+import createExternalSupportRequest from './createExternalSupportRequest'
 
 export {
   createUser,
@@ -14,4 +15,5 @@ export {
   updateUserPassword,
   storeStat,
   buyServicePlan,
+  createExternalSupportRequest,
 }

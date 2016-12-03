@@ -1,4 +1,4 @@
-import { getActivations } from '../../routes/users/services'
+import { getActivations } from '../../../routes/users/services'
 
 export default async (_, params, { user, checkAuth }) => {
   checkAuth()

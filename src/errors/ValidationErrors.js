@@ -1,4 +1,4 @@
-function ValidationErrors(errors = {}) {
+function ValidationErrors(errors = []) {
   Error.captureStackTrace(this, this.constructor)
   this.name = 'ValidationErrors'
   this.errors = errors
