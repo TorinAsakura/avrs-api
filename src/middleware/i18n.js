@@ -25,12 +25,22 @@ export default function i18nMiddleware() {
     const langs = new locale.Locales(req.headers['accept-language'] || 'en')
     const { normalized } = langs.best(supportedLocales)
 
-    req.i18n = {
-      formatMessage: (msgid, values) => {
-        const msg = new IntlMessageFormat(gt.dgettext(normalized, msgid), normalized)
+    const formatMessage = (msgid, values) => {
+      const msg = new IntlMessageFormat(gt.dgettext(normalized, msgid), normalized)
 
-        return msg.format(values)
-      },
+      return msg.format(values)
+    }
+
+    const formatErrors = (errors) => {
+      return errors.map(({ attribute, error, ...values }) => ({
+        key: attribute.split('.'),
+        message: formatMessage(error, values),
+      }))
+    }
+
+    req.i18n = {
+      formatMessage,
+      formatErrors,
     }
 
     next()
