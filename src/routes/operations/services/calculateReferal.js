@@ -1,6 +1,5 @@
 import db from '../../../db'
 import User from '../../users/models/user'
-import Position from '../../users/models/position'
 import ReferalOperation from '../models/ReferalOperation'
 
 export default async (rentalOperation) => {
@@ -9,7 +8,7 @@ export default async (rentalOperation) => {
     where: { id: rentalOperation.userId },
   })
 
-  const levels = await Position.getLevels(agents)
+  const levels = await Position.getLevels(agents) // eslint-disable-line no-undef
 
   const { result: operations } = agents.reverse().reduce(({ prev, total, result }, userId) => {
     if (!(levels[userId] > prev)) {
@@ -55,7 +54,7 @@ export default async (rentalOperation) => {
   await db.transaction((transaction) => {
     const updateBalance = ({ userId, amount }) =>
       User.update(
-        { balance: db.literal(`balance + ${amount}`) },
+        { referalBalance: db.literal(`"referalBalance" + ${amount}`) },
         { where: { id: userId } },
         { transaction },
       )

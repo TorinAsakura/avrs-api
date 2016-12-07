@@ -9,6 +9,11 @@ import buyServicePlan from './buyServicePlan'
 import buildNetwork from './buildNetwork'
 import getActivations from './getActivations'
 import getMembers from './getMembers'
+import getUsers from './getUsers'
+import getUser from './getUser'
+import getTopReferals from './getTopReferals'
+import getDirectReferals from './getDirectReferals'
+import getNetworkHierarchy from './getNetworkHierarchy'
 
 export {
   auth,
@@ -22,4 +27,9 @@ export {
   buildNetwork,
   getActivations,
   getMembers,
+  getUsers,
+  getUser,
+  getTopReferals,
+  getDirectReferals,
+  getNetworkHierarchy,
 }

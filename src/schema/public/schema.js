@@ -63,6 +63,7 @@ const schema = `
 
   type UserType {
     id: ID!,
+    status: String!,
     email: String!,
     firstName: String!,
     lastName: String!,
@@ -71,6 +72,8 @@ const schema = `
     inviteCode: String,
     activations: [ActivationType]!,
     plan: ServicePlanType,
+    salesBalance: Float!,
+    referals: Int!
   }
 
   type NetworkUserType {
@@ -78,7 +81,15 @@ const schema = `
     email: String!,
     firstName: String!,
     lastName: String!,
+    salesBalance: Float!,
     createdAt: String!
+  }
+
+  type NetworkHierarchyUserType {
+    id: ID!,
+    firstName: String!,
+    lastName: String!,
+    children: [NetworkHierarchyUserType]
   }
 
   type SessionType {
@@ -135,7 +146,11 @@ const schema = `
     referalOperations: [ReferalOperationType]!,
     network: [NetworkUserType]!,
     activations: [ActivationType]!,
-    members: [NetworkUserType]!
+    members: [NetworkUserType]!,
+    networkTopReferals: [NetworkUserType]!,
+    networkDirectReferals: [NetworkUserType]!
+    networkHierarchy: [NetworkHierarchyUserType]!,
+    networkReferalStat (id: ID!) : NetworkUserType
   }
 
   type RootMutation {
