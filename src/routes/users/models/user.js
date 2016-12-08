@@ -5,7 +5,6 @@ import Sequelize from 'sequelize'
 import moment from 'moment'
 import db from '../../../db'
 import Activation from './activation'
-import Position from './position'
 
 const User = db.define('user', {
   email: {
@@ -27,7 +26,15 @@ const User = db.define('user', {
   resetToken: {
     type: Sequelize.STRING,
   },
-  balance: {
+  rentalBalance: {
+    type: Sequelize.FLOAT,
+    defaultValue: 0,
+  },
+  referalBalance: {
+    type: Sequelize.FLOAT,
+    defaultValue: 0,
+  },
+  salesBalance: {
     type: Sequelize.FLOAT,
     defaultValue: 0,
   },
@@ -37,6 +44,10 @@ const User = db.define('user', {
     defaultValue: function () {
       return randomString(10)
     },
+  },
+  status: {
+    type: Sequelize.ENUM('NEW', 'ACTIVE', 'INACTIVE'), // eslint-disable-line new-cap
+    defaultValue: 'NEW',
   },
   isAdmin: {
     type: Sequelize.BOOLEAN,
@@ -72,6 +83,12 @@ const User = db.define('user', {
   },
 }, {
   getterMethods: {
+    parentNetworkPath: function () {
+      return this.getDataValue('networkPath')
+    },
+    balance: function () {
+      return this.getDataValue('rentalBalance') + this.getDataValue('referalBalance')
+    },
     servicePlan: function () {
       const [activation] = (this.Activations || []).filter(({ startAt, expireAt }) => {
         return moment().isBetween(startAt, expireAt)
@@ -82,13 +99,38 @@ const User = db.define('user', {
     agentsNetworkPath: function () {
       return this.getDataValue('networkPath')
     },
+    level: function () {
+      const amount = this.getDataValue('salesBalance')
+
+      if (amount < 5000) {
+        return 0.05
+      } else if (amount < 20000) {
+        return 0.1
+      } else if (amount < 60000) {
+        return 0.13
+      } else if (amount < 120000) {
+        return 0.16
+      } else if (amount < 250000) {
+        return 0.18
+      }
+
+      return 0.2
+    },
+  },
+  instanceMethods: {
+    referals() {
+      return User.count({
+        where: {
+          networkPath: {
+            $contains: this.networkPath,
+          },
+        },
+      })
+    },
   },
 })
 
 Activation.belongsTo(User)
 User.hasMany(Activation, { as: 'Activations' })
-
-Position.belongsTo(User)
-User.hasMany(Position, { as: 'position' })
 
 export default User

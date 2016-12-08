@@ -15,6 +15,9 @@ const resolverMap = {
 
       return activation ? activation.servicePlan : null
     },
+    referals(user) {
+      return user.referals()
+    },
   },
   RootQuery: queries,
   RootMutation: mutations,
