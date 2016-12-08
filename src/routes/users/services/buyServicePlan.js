@@ -1,6 +1,7 @@
 import moment from 'moment'
+import db from '../../../db'
+import User from '../models/user'
 import Activation from '../models/activation'
-import Position from '../models/position'
 
 export default async function buyServicePlan(user, servicePlan) {
   const [lastExpired] = user.Activations.sort((left, right) => {
@@ -11,7 +12,22 @@ export default async function buyServicePlan(user, servicePlan) {
 
   const activation = await Activation.create({ startAt, servicePlan, userId: user.id })
 
-  await Position.bulkCreate(user.networkPath.map(id => ({ userId: id, amount: activation.servicePlan.price })))
+  if (user.status === 'NEW') {
+    user.status = 'ACTIVE'
+    await user.save()
+  }
+
+  await db.transaction(transaction =>
+    Promise.all(
+      user.networkPath.map(id =>
+        User.update(
+          { salesBalance: db.literal(`"salesBalance" + ${activation.servicePlan.price}`) },
+          { where: { id } },
+          { transaction },
+        ),
+      ),
+    ),
+  )
 
   return activation.servicePlan
 }

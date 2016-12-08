@@ -22,7 +22,7 @@ export default async (session) => {
   const [, , operation] = await db.transaction((transaction) => {
     return Promise.all([
       User.update({
-        balance: db.literal(`balance + ${amount}`),
+        rentalBalance: db.literal(`"rentalBalance" + ${amount}`),
       }, {
         where: {
           id: session.userId,
