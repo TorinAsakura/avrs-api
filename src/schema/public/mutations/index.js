@@ -6,6 +6,8 @@ import updateUserPassword from './updateUserPassword'
 import storeStat from './storeStat'
 import buyServicePlan from './buyServicePlan'
 import createExternalSupportRequest from './createExternalSupportRequest'
+import startActivation from './startActivation'
+import stopActivation from './stopActivation'
 
 export {
   createUser,
@@ -16,4 +18,6 @@ export {
   storeStat,
   buyServicePlan,
   createExternalSupportRequest,
+  startActivation,
+  stopActivation,
 }

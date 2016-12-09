@@ -1,16 +1,27 @@
-import moment from 'moment'
 import db from '../../../db'
 import User from '../models/user'
 import Activation from '../models/activation'
 
 export default async function buyServicePlan(user, servicePlan) {
-  const [lastExpired] = user.Activations.sort((left, right) => {
-    return moment.utc(right.expireAt).diff(moment.utc(left.expireAt))
-  })
+  const [active] = user.Activations.filter(activation => activation.isActive() && !activation.isExpired())
 
-  const startAt = lastExpired ? lastExpired.expireAt : new Date()
+  let data = null
 
-  const activation = await Activation.create({ startAt, servicePlan, userId: user.id })
+  if (active) {
+    data = {
+      servicePlan,
+      userId: user.id,
+    }
+  } else {
+    data = {
+      servicePlan,
+      startAt: new Date(),
+      userId: user.id,
+      status: 'ACTIVE',
+    }
+  }
+
+  const activation = await Activation.create(data)
 
   if (user.status === 'NEW') {
     user.status = 'ACTIVE'
