@@ -8,7 +8,7 @@ const resolverMap = {
       return user.schedule
     },
     activations(user) {
-      return user.Activations.filter(({ expireAt }) => moment().isBefore(expireAt))
+      return user.Activations.filter(activation => !activation.isExpired())
     },
     plan(user) {
       const [activation] = user.Activations.filter(({ startAt, expireAt }) => moment().isBetween(startAt, expireAt))

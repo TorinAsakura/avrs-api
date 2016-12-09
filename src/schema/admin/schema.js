@@ -32,8 +32,9 @@ const schema = `
 
   type Activation {
     id: ID!,
-    startAt: String!,
-    expireAt: String!,
+    status: String!,
+    startAt: String,
+    leftTime: Int!,
     createdAt: String!,
     servicePlan: ServicePlan!
   }
