@@ -14,6 +14,8 @@ import getUser from './getUser'
 import getTopReferals from './getTopReferals'
 import getDirectReferals from './getDirectReferals'
 import getNetworkHierarchy from './getNetworkHierarchy'
+import startActivation from './startActivation'
+import stopActivation from './stopActivation'
 
 export {
   auth,
@@ -32,4 +34,6 @@ export {
   getTopReferals,
   getDirectReferals,
   getNetworkHierarchy,
+  startActivation,
+  stopActivation,
 }

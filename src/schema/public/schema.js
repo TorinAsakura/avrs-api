@@ -55,8 +55,9 @@ const schema = `
 
   type ActivationType {
     id: ID!,
-    startAt: String!,
-    expireAt: String!,
+    status: String!,
+    startAt: String,
+    leftTime: Int!,
     createdAt: String!,
     servicePlan: ServicePlanType!
   }
@@ -169,7 +170,9 @@ const schema = `
     updateUserPassword (password: PasswordType!, token: String!) : TokenResponseType,
     storeStat (sessionId: ID!, value: String!) : Boolean,
     buyServicePlan (id: ID!) : ServicePlanType!,
-    createExternalSupportRequest (email: String!, subject: String!, message: String!) : ExternalSupportRequestResponse
+    createExternalSupportRequest (email: String!, subject: String!, message: String!) : ExternalSupportRequestResponse,
+    startActivation (id: ID!) : ActivationType!,
+    stopActivation (id: ID!) : ActivationType!,
   }
 
   schema {
