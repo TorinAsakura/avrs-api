@@ -62,6 +62,12 @@ const schema = `
     servicePlan: ServicePlanType!
   }
 
+  type Sponsor {
+    id: ID!,
+    firstName: String!,
+    lastName: String!
+  }
+
   type UserType {
     id: ID!,
     status: String!,
@@ -74,7 +80,9 @@ const schema = `
     activations: [ActivationType]!,
     plan: ServicePlanType,
     salesBalance: Float!,
-    referals: Int!
+    referals: Int!,
+    createdAt: String!,
+    sponsor: Sponsor
   }
 
   type NetworkUserType {
