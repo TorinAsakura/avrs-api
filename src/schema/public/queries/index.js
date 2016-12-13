@@ -9,6 +9,8 @@ import networkTopReferals from './networkTopReferals'
 import networkDirectReferals from './networkDirectReferals'
 import networkHierarchy from './networkHierarchy'
 import networkReferalStat from './networkReferalStat'
+import supportRequests from './supportRequests'
+import supportRequest from './supportRequest'
 
 export {
   user,
@@ -22,4 +24,6 @@ export {
   networkDirectReferals,
   networkHierarchy,
   networkReferalStat,
+  supportRequests,
+  supportRequest,
 }
