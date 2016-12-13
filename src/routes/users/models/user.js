@@ -83,6 +83,9 @@ const User = db.define('user', {
   },
 }, {
   getterMethods: {
+    sponsorId: function () {
+      return this.getDataValue('networkPath').slice(-1).pop()
+    },
     parentNetworkPath: function () {
       return this.getDataValue('networkPath')
     },
@@ -126,6 +129,13 @@ const User = db.define('user', {
           },
         },
       })
+    },
+    sponsor() {
+      if (this.sponsorId) {
+        return User.findById(this.sponsorId, { attributes: ['id', 'firstName', 'lastName'] })
+      }
+
+      return null
     },
   },
 })
