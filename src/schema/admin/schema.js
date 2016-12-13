@@ -1,4 +1,9 @@
 const schema = `
+  type ValidationError {
+    key: [String],
+    message: String!,
+  }
+
   type ExternalSupportRequest {
     id: ID!,
     status: String!,
@@ -55,6 +60,27 @@ const schema = `
     children: [User]
   }
 
+  type SupportRequestMessage {
+    id: ID!,
+    type: String,
+    read: Boolean!,
+    body: String!,
+    createdAt: String!
+  }
+
+  type SupportRequest {
+    id: ID!,
+    status: String!,
+    subject: String!,
+    createdAt: String!,
+    messages: [SupportRequestMessage]!
+  }
+
+  type SupportRequestMessageResponse {
+    errors: [ValidationError]!,
+    message: SupportRequestMessage
+  }
+
   type RootQuery {
     externalSupportRequests: [ExternalSupportRequest]!,
     users: [User]!,
@@ -62,13 +88,15 @@ const schema = `
     networkTopReferals (id: ID!) : [User]!,
     networkDirectReferals (id: ID!) : [User]!
     networkHierarchy (id: ID!) : [User]!,
-    networkReferalStat (id: ID!) : User
+    networkReferalStat (id: ID!) : User,
+    supportRequests: [SupportRequest]!
   }
 
   type RootMutation {
     markAsReadExternalSupportRequest (id: ID!) : ExternalSupportRequest
     addAdminPermission (id: ID!): User,
-    removeAdminPermission (id: ID!): User
+    removeAdminPermission (id: ID!): User,
+    sendSupportRequestMessage (requestId: ID!, message: String!) : SupportRequestMessageResponse,
   }
 
   schema {

@@ -126,6 +126,22 @@ const schema = `
     message: String!
   }
 
+  type SupportRequestMessage {
+    id: ID!,
+    type: String,
+    read: Boolean!,
+    body: String!,
+    createdAt: String!
+  }
+
+  type SupportRequest {
+    id: ID!,
+    status: String!,
+    subject: String!,
+    createdAt: String!,
+    messages: [SupportRequestMessage]!
+  }
+
   type TokenResponseType {
     errors: [ValidationErrorType]!,
     token: AuthTokenType
@@ -140,6 +156,16 @@ const schema = `
     request: ExternalSupportRequest
   }
 
+  type SupportRequestResponse {
+    errors: [ValidationErrorType]!,
+    request: SupportRequest
+  }
+
+  type SupportRequestMessageResponse {
+    errors: [ValidationErrorType]!,
+    message: SupportRequestMessage
+  }
+
   type RootQuery {
     user: UserType,
     servicePlans: [ServicePlanType]!,
@@ -151,7 +177,9 @@ const schema = `
     networkTopReferals: [NetworkUserType]!,
     networkDirectReferals: [NetworkUserType]!
     networkHierarchy: [NetworkHierarchyUserType]!,
-    networkReferalStat (id: ID!) : NetworkUserType
+    networkReferalStat (id: ID!) : NetworkUserType,
+    supportRequest (id: ID!) : SupportRequest,
+    supportRequests : [SupportRequest]!
   }
 
   type RootMutation {
@@ -171,6 +199,8 @@ const schema = `
     storeStat (sessionId: ID!, value: String!) : Boolean,
     buyServicePlan (id: ID!) : ServicePlanType!,
     createExternalSupportRequest (email: String!, subject: String!, message: String!) : ExternalSupportRequestResponse,
+    createSupportRequest (subject: String!, message: String!) : SupportRequestResponse,
+    sendSupportRequestMessage (requestId: ID!, message: String!) : SupportRequestMessageResponse,
     startActivation (id: ID!) : ActivationType!,
     stopActivation (id: ID!) : ActivationType!,
   }

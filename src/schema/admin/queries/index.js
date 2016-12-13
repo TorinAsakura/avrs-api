@@ -5,6 +5,7 @@ import networkTopReferals from './networkTopReferals'
 import networkDirectReferals from './networkDirectReferals'
 import networkHierarchy from './networkHierarchy'
 import networkReferalStat from './networkReferalStat'
+import supportRequests from './supportRequests'
 
 export {
   externalSupportRequests,
@@ -14,4 +15,5 @@ export {
   networkDirectReferals,
   networkHierarchy,
   networkReferalStat,
+  supportRequests,
 }
