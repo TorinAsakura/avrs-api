@@ -18,6 +18,9 @@ const resolverMap = {
     referals(user) {
       return user.referals()
     },
+    sponsor(user) {
+      return user.sponsor()
+    },
   },
   RootQuery: queries,
   RootMutation: mutations,
