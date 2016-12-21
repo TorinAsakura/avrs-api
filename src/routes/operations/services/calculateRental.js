@@ -1,17 +1,9 @@
 import db from '../../../db'
 import User from '../../users/models/user'
-import Activation from '../../users/models/activation'
 import RentalOperation from '../models/RentalOperation'
 
 export default async (session) => {
-  const user = await User.findOne({
-    where: { id: session.userId },
-    include: [{
-      model: Activation,
-      as: 'Activations',
-    }],
-  })
-  const servicePlan = user.Activations[0].servicePlan
+  const { servicePlan } = await session.getActivation()
 
   const amount = Math.floor((servicePlan.profitabilityPerHour * (session.time / 3600)) * 100) / 100
 

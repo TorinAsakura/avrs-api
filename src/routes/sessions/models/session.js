@@ -4,6 +4,7 @@ import Sequelize from 'sequelize'
 import moment from 'moment'
 import db from '../../../db'
 import User from '../../users/models/user'
+import Activation from '../../users/models/activation'
 
 const Session = db.define('session', {
   id: {
@@ -35,5 +36,6 @@ const Session = db.define('session', {
 })
 
 Session.belongsTo(User)
+Session.belongsTo(Activation)
 
 export default Session
