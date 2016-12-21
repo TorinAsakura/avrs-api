@@ -1,10 +1,10 @@
 import moment from 'moment'
 import Session from '../models/session'
 
-export default async (user, startAt) => {
+export default async (userId, activation, startAt) => {
   const sessions = await Session.findAll({
     where: {
-      userId: user.id,
+      userId,
       startAt: {
         $lt: moment(startAt).endOf('day').toDate(),
         $gt: moment(startAt).startOf('day').toDate(),
@@ -14,5 +14,5 @@ export default async (user, startAt) => {
 
   const usedTime = sessions.reduce((result, session) => result + session.time, 0)
 
-  return (user.servicePlan.time * 60 * 60) - usedTime
+  return (activation.servicePlan.time * 60 * 60) - usedTime
 }

@@ -3,19 +3,26 @@ import User from '../../users/models/user'
 import ReferalOperation from '../models/ReferalOperation'
 
 export default async (rentalOperation) => {
-  const { agentsNetworkPath: agents } = await User.findOne({
+  const { agentsNetworkPath } = await User.findOne({
     attributes: ['networkPath'],
     where: { id: rentalOperation.userId },
   })
 
-  const levels = await Position.getLevels(agents) // eslint-disable-line no-undef
+  const agents = await User.findAll({
+    attributes: ['id', 'salesBalance'],
+    where: {
+      id: {
+        $in: agentsNetworkPath,
+      },
+    },
+  })
 
-  const { result: operations } = agents.reverse().reduce(({ prev, total, result }, userId) => {
-    if (!(levels[userId] > prev)) {
+  const { result: operations } = agents.reverse().reduce(({ prev, total, result }, agent) => {
+    if (!(agent.level > prev)) {
       return { prev, total, result }
     }
 
-    const level = levels[userId] - prev
+    const level = agent.level - prev
 
     if (level + total > 0.2) {
       return { prev, total, result }
@@ -25,22 +32,22 @@ export default async (rentalOperation) => {
 
     if (bonus < 0.01) {
       return {
-        prev: levels[userId],
+        prev: agent.level,
         total: level + total,
         result,
       }
     }
 
     return {
-      prev: levels[userId],
+      prev: agent.level,
       total: level + total,
       result: [
         ...result,
         {
-          userId,
           amount: bonus,
-          package: rentalOperation.package,
           percent: level,
+          userId: agent.id,
+          package: rentalOperation.package,
           participantId: rentalOperation.userId,
         },
       ],
