@@ -11,6 +11,8 @@ COPY src /app/src
 COPY db /app/db
 COPY locales /app/locales
 
+RUN apt-get update && apt-get -y install libmcrypt-dev
+
 RUN npm install --only=prod
 
 ENV NODE_ENV production

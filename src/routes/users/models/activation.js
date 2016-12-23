@@ -6,6 +6,9 @@ import db from '../../../db'
 import config from '../../../config'
 
 const Activation = db.define('activation', {
+  license: {
+    type: Sequelize.STRING,
+  },
   startAt: {
     type: Sequelize.DATE,
   },
@@ -19,19 +22,30 @@ const Activation = db.define('activation', {
   },
   servicePlan: {
     type: Sequelize.STRING,
-    set: function (servicePlan) {
-      this.setDataValue('servicePlan', servicePlan)
+    set: function ({ type, period }) {
+      this.setDataValue('servicePlan', `${type}_${period}`)
     },
     get: function () {
-      const servicePlan = this.getDataValue('servicePlan')
-
-      if (!servicePlan) {
+      if (!this.getDataValue('servicePlan')) {
         return null
       }
 
-      const [plan] = config.get('servicePlans').filter(item => item.id === servicePlan)
+      const [type, period] = this.getDataValue('servicePlan').split('_')
 
-      return plan
+      const [plan] = config.get('servicePlans')
+                           .filter(item => item.type === type && item.period === parseInt(period, 10))
+
+      if (plan) {
+        return plan
+      }
+
+      // remove with paln ids
+
+      const servicePlan = this.getDataValue('servicePlan')
+
+      const [prevPlan] = config.get('servicePlans').filter(item => item.id === servicePlan)
+
+      return prevPlan
     },
   },
 }, {
@@ -42,6 +56,10 @@ const Activation = db.define('activation', {
   },
   instanceMethods: {
     getServicePlanPeriod() {
+      if (!this.servicePlan) {
+        return 30 * 24 * 60 * 60
+      }
+
       return this.servicePlan.period * 24 * 60 * 60
     },
     getUsedTime() {

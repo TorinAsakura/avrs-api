@@ -40,6 +40,35 @@ const registerUser = {
       model: User,
     },
   },
+  phone: {
+    presence: {
+      message: '^Can\'t be blank',
+    },
+    phone: true,
+  },
+  sex: {
+    inclusion: ['male', 'female'],
+  },
+  birthday: {
+    presence: {
+      message: '^Can\'t be blank',
+    },
+    datetime: true,
+  },
+  country: {
+    presence: {
+      message: '^Can\'t be blank',
+    },
+  },
+  captcha: {
+    captcha: true,
+  },
+  agreement: {
+    inclusion: {
+      within: [true],
+      message: '^This value is required',
+    },
+  },
   activateUrl: {
     presence: {
       message: '^Can\'t be blank',

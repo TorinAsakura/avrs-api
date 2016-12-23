@@ -25,7 +25,7 @@ export default async (session) => {
         amount,
         time: session.time,
         userId: session.userId,
-        package: servicePlan.name,
+        package: servicePlan.type,
       }, { transaction }),
     ])
   })
