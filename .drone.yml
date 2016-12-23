@@ -2,6 +2,8 @@ pipeline:
   install:
     image: node:${NODE_VERSION}
     commands:
+      - apt-get update
+      - apt-get -y install libmcrypt-dev
       - npm install
 
   lint:

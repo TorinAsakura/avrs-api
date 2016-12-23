@@ -8,6 +8,12 @@ services:
     ports:
       - "8499:80"
 
+  install:
+    image: node
+    volumes:
+      - ./:/workspace
+    entrypoint: bash -c "apt-get update && apt-get -y install libmcrypt-dev && cd /workspace && npm install"
+
   postgres:
     image: postgres
     environment:
