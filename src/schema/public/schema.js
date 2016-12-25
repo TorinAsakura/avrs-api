@@ -5,42 +5,34 @@ const schema = `
     CALCULATED
   }
 
-  input PasswordType {
+  input Password {
     value: String!,
     confirmation: String!
   }
 
-  type AuthTokenType {
+  type AuthToken {
     id: ID!,
     email: String!,
     token: String!
   }
 
-  type ValidationErrorType {
+  type ValidationError {
     key: [String],
     message: String!,
   }
 
-  type ServicePlanCpuType {
-    from: Int!,
-    to: Int!
-  }
-
-  type ServicePlanType {
-    id: ID!,
+  type ServicePlan {
     type: String!,
-    name: String!,
+    period: Int!,
     time: Int!,
     price: Int!,
-    period: Int!,
     profitability: Int!,
     profitabilityPerDay: Float!,
     profitabilityPerHour: Float!,
     profit: Int!,
     amount: Int!,
     memory: Int!,
-    cpu: ServicePlanCpuType!,
-    expireAt: String
+    cpu: Int!
   }
 
   type UserSchedule {
@@ -53,13 +45,13 @@ const schema = `
     sun: [String]!
   }
 
-  type ActivationType {
+  type Activation {
     id: ID!,
     status: String!,
     startAt: String,
     leftTime: Int!,
     createdAt: String!,
-    servicePlan: ServicePlanType!
+    servicePlan: ServicePlan!
   }
 
   type Sponsor {
@@ -68,24 +60,30 @@ const schema = `
     lastName: String!
   }
 
-  type UserType {
+  type User {
     id: ID!,
     status: String!,
     email: String!,
     firstName: String!,
     lastName: String!,
+    phone: String,
+    country: String,
+    sex: String,
+    birthday: String,
+    address: String,
     schedule: UserSchedule!,
-    balance: Float!,
     inviteCode: String,
-    activations: [ActivationType]!,
-    plan: ServicePlanType,
+    activations: [Activation]!,
+    plan: ServicePlan,
+    balance: Float!,
     salesBalance: Float!,
+    referalBalance: Float!,
     referals: Int!,
     createdAt: String!,
     sponsor: Sponsor
   }
 
-  type NetworkUserType {
+  type NetworkUser {
     id: ID!,
     email: String!,
     firstName: String!,
@@ -94,21 +92,21 @@ const schema = `
     createdAt: String!
   }
 
-  type NetworkHierarchyUserType {
+  type NetworkHierarchyUser {
     id: ID!,
     firstName: String!,
     lastName: String!,
-    children: [NetworkHierarchyUserType]
+    children: [NetworkHierarchyUser]
   }
 
-  type SessionType {
+  type Session {
     id: ID!,
     time: Int!,
     leftTime: Int!,
     status: SessionStatus!
   }
 
-  type RentalOperationType {
+  type RentalOperation {
     id: ID!,
     date: String!,
     amount: Float!,
@@ -116,7 +114,7 @@ const schema = `
     time: Int!
   }
 
-  type ReferalOperationType {
+  type ReferalOperation {
     id: ID!,
     date: String!,
     amount: Float!,
@@ -124,6 +122,14 @@ const schema = `
     package: String!,
     userId: ID!,
     participantId: ID!
+  }
+
+  type Operation {
+    id: ID!,
+    date: String!,
+    amount: Float!,
+    status: String!,
+    direction: String!
   }
 
   type ExternalSupportRequest {
@@ -150,44 +156,77 @@ const schema = `
     messages: [SupportRequestMessage]!
   }
 
-  type TokenResponseType {
-    errors: [ValidationErrorType]!,
-    token: AuthTokenType
+  type ShopProduct {
+    url: String!,
   }
 
-  type ResetUserPasswordResponseType {
-    errors: [ValidationErrorType]!
+  type StatValue {
+    date: String!,
+    amount: Float!
+  }
+
+  type PaymentsStat {
+    rental: [StatValue]!,
+    referal: [StatValue]!
+  }
+
+  type NetworkStat {
+    connections: [StatValue]!,
+    activations: [StatValue]!
+  }
+
+  type TokenResponse {
+    errors: [ValidationError]!,
+    token: AuthToken
+  }
+
+  type UserResponse {
+    errors: [ValidationError]!,
+    user: User
+  }
+
+  type ResetUserPasswordResponse {
+    errors: [ValidationError]!
   }
 
   type ExternalSupportRequestResponse {
-    errors: [ValidationErrorType]!,
+    errors: [ValidationError]!,
     request: ExternalSupportRequest
   }
 
   type SupportRequestResponse {
-    errors: [ValidationErrorType]!,
+    errors: [ValidationError]!,
     request: SupportRequest
   }
 
   type SupportRequestMessageResponse {
-    errors: [ValidationErrorType]!,
+    errors: [ValidationError]!,
     message: SupportRequestMessage
   }
 
+  type ApplyLicenseResponse {
+    activation: Activation,
+    error: String
+  }
+
   type RootQuery {
-    user: UserType,
-    servicePlans: [ServicePlanType]!,
-    rentalOperations: [RentalOperationType]!,
-    referalOperations: [ReferalOperationType]!,
-    network: [NetworkUserType]!,
-    activations: [ActivationType]!,
-    members: [NetworkUserType]!,
-    networkTopReferals: [NetworkUserType]!,
-    networkDirectReferals: [NetworkUserType]!
-    networkHierarchy: [NetworkHierarchyUserType]!,
-    networkReferalStat (id: ID!) : NetworkUserType,
+    user: User,
+    servicePlans: [ServicePlan]!,
+    rentalOperations: [RentalOperation]!,
+    referalOperations: [ReferalOperation]!,
+    operations: [Operation]!,
+    network: [NetworkUser]!,
+    activations: [Activation]!,
+    members: [NetworkUser]!,
+    networkTopReferals: [NetworkUser]!,
+    networkDirectReferals: [NetworkUser]!
+    networkHierarchy: [NetworkHierarchyUser]!,
+    networkReferalStat (id: ID!) : NetworkUser,
     supportRequest (id: ID!) : SupportRequest,
-    supportRequests : [SupportRequest]!
+    supportRequests : [SupportRequest]!,
+    generateShopLink (type: String!, period: String!) : ShopProduct!,
+    paymentsStat : PaymentsStat!,
+    networkStat : NetworkStat!
   }
 
   type RootMutation {
@@ -195,22 +234,44 @@ const schema = `
       email: String!,
       firstName: String!,
       lastName: String!,
-      password: PasswordType!,
+      password: Password!,
       inviteCode: String,
+      phone: String!,
+      country: String!,
+      sex: String!,
+      birthday: String!,
+      captcha: String!,
+      agreement: Boolean!,
       activateUrl: String!
-    ) : TokenResponseType,
+    ) : TokenResponse,
 
-    activateUser (token: String!) : TokenResponseType,
-    loginUser (email: String!, password: String!) : TokenResponseType,
-    resetUserPassword (email: String!, resetUrl: String!) : ResetUserPasswordResponseType,
-    updateUserPassword (password: PasswordType!, token: String!) : TokenResponseType,
+    userGeneralInformation (
+      email: String!,
+      firstName: String!,
+      lastName: String!,
+      phone: String,
+      sex: String,
+      birthday: String,
+      address: String,
+      country: String,
+      receiveEmails: Boolean!,
+      receiveAnnouncements: Boolean!
+    ) : UserResponse!,
+
+    activateUser (token: String!) : TokenResponse,
+    loginUser (email: String!, password: String!) : TokenResponse,
+    resetUserPassword (email: String!, resetUrl: String!) : ResetUserPasswordResponse,
+    updateUserPassword (password: Password!, token: String!) : TokenResponse,
     storeStat (sessionId: ID!, value: String!) : Boolean,
-    buyServicePlan (id: ID!) : ServicePlanType!,
+    buyServicePlan (id: ID!) : ServicePlan!,
     createExternalSupportRequest (email: String!, subject: String!, message: String!) : ExternalSupportRequestResponse,
     createSupportRequest (subject: String!, message: String!) : SupportRequestResponse,
     sendSupportRequestMessage (requestId: ID!, message: String!) : SupportRequestMessageResponse,
-    startActivation (id: ID!) : ActivationType!,
-    stopActivation (id: ID!) : ActivationType!,
+    startActivation (id: ID!) : Activation!,
+    stopActivation (id: ID!) : Activation!,
+    transfer (amount: Float!) : Operation!,
+    withdrawToCard (amount: Float!, number: String!) : Operation!,
+    applyLicense (license: String!) : ApplyLicenseResponse!,
   }
 
   schema {

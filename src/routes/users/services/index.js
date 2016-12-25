@@ -16,6 +16,9 @@ import getDirectReferals from './getDirectReferals'
 import getNetworkHierarchy from './getNetworkHierarchy'
 import startActivation from './startActivation'
 import stopActivation from './stopActivation'
+import calculateStat from './calculateStat'
+import updateUserGeneralInformation from './updateUserGeneralInformation'
+import applyLicense from './applyLicense'
 
 export {
   auth,
@@ -36,4 +39,7 @@ export {
   getNetworkHierarchy,
   startActivation,
   stopActivation,
+  calculateStat,
+  updateUserGeneralInformation,
+  applyLicense,
 }

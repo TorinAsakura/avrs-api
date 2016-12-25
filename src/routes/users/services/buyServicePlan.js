@@ -1,9 +1,15 @@
 import db from '../../../db'
+import config from '../../../config'
 import User from '../models/user'
 import Activation from '../models/activation'
 
-export default async function buyServicePlan(user, servicePlan) {
+export default async function buyServicePlan(user, servicePlanId) {
   const [active] = user.Activations.filter(activation => activation.isActive() && !activation.isExpired())
+
+  const [type, period] = servicePlanId.split('_')
+
+  const [servicePlan] = config.get('servicePlans')
+                              .filter(plan => plan.type === type && plan.period === parseInt(period, 10))
 
   let data = null
 
