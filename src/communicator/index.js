@@ -1,49 +1,72 @@
 import moment from 'moment'
 import redisClient from '../redisClient'
-import User from '../routes/users/models/user'
 import Activation from '../routes/users/models/activation'
 import { createSession, calculateLeftTime } from '../routes/sessions/services'
 
-const handleSessionStart = async ({ startAt }, socket, { userId }) => {
-  const user = await User.findById(userId, {
-    include: [{
-      model: Activation,
-      as: 'Activations',
-    }],
-  })
+// const loadSession = async (activationId) => {
+//  const session = await redisClient.getAsync(`session-${activationId}`)
+//
+//  return session ? JSON.parse(session) : null
+// }
 
-  const leftTime = await calculateLeftTime(user, startAt)
+const handleSessionStart = async ({ activationId, startAt }, socket, { userId, machineId }) => {
+  // const saved = loadSession(activationId)
+
+  // if (saved && saved.activationId === activationId) {
+  //  socket.emit('session:used') restart session on agent
+  //  return null
+  // }
+
+  const activation = await Activation.findById(activationId)
+
+  if (!(activation && !activation.isExpired())) {
+    socket.emit('session:expired')
+
+    return null
+  }
+
+  if (activation.userId !== userId) {
+    socket.emit('session:unknown')
+
+    return null
+  }
+
+  const now = moment().utc().valueOf()
+  const startAtTime = (now - startAt) < 6000 ? startAt : now
+
+  const leftTime = await calculateLeftTime(userId, activation, startAtTime)
+
+  const session = {
+    activationId,
+    machineId,
+    startAt: startAtTime,
+  }
+
+  socket.activationId = activationId
+
+  // ttl endAt
+  redisClient.set(`session-${activationId}`, JSON.stringify(session))
 
   socket.emit('session:started', { leftTime })
 
-  const session = {
-    clientStartAt: startAt,
-    startAt: new Date(),
-  }
-
-  redisClient.set(`session-${userId}`, JSON.stringify(session))
+  return null
 }
 
 const handleSessionClose = async (data, socket, { userId }) => {
-  const session = await redisClient.getAsync(`session-${userId}`)
+  const activationId = socket.activationId
+
+  const session = await redisClient.getAsync(`session-${activationId}`)
 
   if (!session) {
     return
   }
 
-  const { clientStartAt, startAt } = JSON.parse(session)
+  const { startAt } = JSON.parse(session)
+  const clientStartAt = moment(startAt).toDate()
 
-  await createSession(userId, clientStartAt, moment(moment()).diff(startAt, 'seconds'))
+  await createSession(userId, activationId, clientStartAt, moment(moment()).diff(startAt, 'seconds'))
 
-  redisClient.del(`session-${userId}`)
-}
-
-const isAgent = (sockets, id) => {
-  return sockets[id] && sockets[id].clientType === 'agent'
-}
-
-const isClient = (sockets, id) => {
-  return sockets[id] && sockets[id].clientType === 'client'
+  redisClient.del(`session-${activationId}`)
 }
 
 const communicator = async (io, socket) => {
@@ -51,8 +74,7 @@ const communicator = async (io, socket) => {
 
   const userId = socket.userId = payload.id
   const type = socket.clientType = query.type || 'client'
-
-  // agent connection store in redis and check if exists
+  const machineId = socket.machineId = query.machineId
 
   if (!io.accounts[userId]) {
     io.accounts[userId] = []
@@ -61,29 +83,9 @@ const communicator = async (io, socket) => {
   io.accounts[userId].push(socket.id)
 
   if (type === 'agent') {
-    socket.on('session:start', data => handleSessionStart(data, socket, { userId }))
-    socket.on('disconnect', data => handleSessionClose(data, socket, { userId }))
-    socket.on('stat', data => {
-      io.accounts[userId].forEach((id) => {
-        if (isClient(io.sockets.connected, id)) {
-          io.sockets.connected[id].emit('stat', data)
-        }
-      })
-    })
-
-    const clients = io.accounts[userId].filter((id) => isClient(io.sockets.connected, id))
-
-    if (clients.length > 0) {
-      socket.emit('sendStat', true)
-    }
-  } else {
-    io.accounts[userId].forEach((id) => {
-      const target = io.sockets.connected[id]
-
-      if (target && target.clientType === 'agent') {
-        target.emit('sendStat', true)
-      }
-    })
+    socket.on('session:start', data => handleSessionStart(data, socket, { userId, machineId }))
+    socket.on('session:stop', data => handleSessionClose(data, socket, { userId, machineId }))
+    socket.on('disconnect', data => handleSessionClose(data, socket, { userId, machineId }))
   }
 
   socket.on('disconnect', () => {
@@ -91,16 +93,6 @@ const communicator = async (io, socket) => {
 
     if (connections) {
       connections.splice(connections.indexOf(socket.id), 1)
-    }
-
-    const clients = connections.filter(id => isClient(io.sockets.connected, id))
-
-    if (clients.length === 0) {
-      const [agent] = connections.filter(id => isAgent(io.sockets.connected, id))
-
-      if (agent) {
-        io.sockets.connected[agent].emit('sendStat', false)
-      }
     }
   })
 }

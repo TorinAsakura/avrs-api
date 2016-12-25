@@ -3,7 +3,7 @@ import * as queries from './queries'
 import * as mutations from './mutations'
 
 const resolverMap = {
-  UserType: {
+  User: {
     schedule(user) {
       return user.schedule
     },

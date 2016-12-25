@@ -20,6 +20,22 @@ const User = db.define('user', {
   lastName: {
     type: Sequelize.STRING,
   },
+  phone: {
+    type: Sequelize.STRING,
+  },
+  sex: {
+    type: Sequelize.ENUM('male', 'female'),
+    defaultValue: 'male',
+  },
+  birthday: {
+    type: Sequelize.DATE,
+  },
+  address: {
+    type: Sequelize.STRING,
+  },
+  country: {
+    type: Sequelize.STRING,
+  },
   activateToken: {
     type: Sequelize.STRING,
   },
@@ -90,7 +106,7 @@ const User = db.define('user', {
       return this.getDataValue('networkPath')
     },
     balance: function () {
-      return this.getDataValue('rentalBalance') + this.getDataValue('referalBalance')
+      return this.getDataValue('rentalBalance')
     },
     servicePlan: function () {
       const [activation] = (this.Activations || []).filter(({ startAt, expireAt }) => {
@@ -140,7 +156,7 @@ const User = db.define('user', {
   },
 })
 
-Activation.belongsTo(User)
 User.hasMany(Activation, { as: 'Activations' })
+Activation.belongsTo(User)
 
 export default User
