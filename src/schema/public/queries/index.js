@@ -15,6 +15,7 @@ import supportRequest from './supportRequest'
 import generateShopLink from './generateShopLink'
 import paymentsStat from './paymentsStat'
 import networkStat from './networkStat'
+import sessions from './sessions'
 
 export {
   user,
@@ -34,4 +35,5 @@ export {
   generateShopLink,
   paymentsStat,
   networkStat,
+  sessions,
 }
