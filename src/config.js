@@ -29,8 +29,8 @@ nconf.defaults({
     secret: '6959bfc3f2e47b86',
   },
   recaptcha: {
-    siteKey: '6Ldkrw8UAAAAALVD730V83tTVeY72KHULjPo-TvO',
-    secretKey: '6Ldkrw8UAAAAAOJxaUxJ89Fxz8wo6TGBWad8clRN',
+    siteKey: '6Lffyg8UAAAAAIt63I-Ezl3u9gud1Ht7AwmsC1-h',
+    secretKey: '6Lffyg8UAAAAAMCwJFnQ14xeXRv0834EPYZUapwE',
   },
   servicePlans: [
     {
