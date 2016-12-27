@@ -103,7 +103,9 @@ const schema = `
     id: ID!,
     time: Int!,
     leftTime: Int!,
-    status: SessionStatus!
+    startAt: String!,
+    status: SessionStatus!,
+    activation: Activation
   }
 
   type RentalOperation {
@@ -226,7 +228,8 @@ const schema = `
     supportRequests : [SupportRequest]!,
     generateShopLink (type: String!, period: String!) : ShopProduct!,
     paymentsStat : PaymentsStat!,
-    networkStat : NetworkStat!
+    networkStat : NetworkStat!,
+    sessions (from: String, to: String, activations: [ID!]) : [Session]!
   }
 
   type RootMutation {
