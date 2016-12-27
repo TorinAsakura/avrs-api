@@ -3,6 +3,7 @@ import closeSession from './closeSession'
 import storeStat from './storeStat'
 import calculateLeftTime from './calculateLeftTime'
 import createSession from './createSession'
+import getSessions from './getSessions'
 
 export {
   startSession,
@@ -10,4 +11,5 @@ export {
   storeStat,
   calculateLeftTime,
   createSession,
+  getSessions,
 }
