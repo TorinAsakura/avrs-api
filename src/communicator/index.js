@@ -3,19 +3,19 @@ import redisClient from '../redisClient'
 import Activation from '../routes/users/models/activation'
 import { createSession, calculateLeftTime } from '../routes/sessions/services'
 
-// const loadSession = async (activationId) => {
-//  const session = await redisClient.getAsync(`session-${activationId}`)
-//
-//  return session ? JSON.parse(session) : null
-// }
+const loadSession = async (activationId) => {
+  const session = await redisClient.getAsync(`session-${activationId}`)
+
+  return session ? JSON.parse(session) : null
+}
 
 const handleSessionStart = async ({ activationId, startAt }, socket, { userId, machineId }) => {
-  // const saved = loadSession(activationId)
+  const saved = await loadSession(activationId)
 
-  // if (saved && saved.activationId === activationId) {
-  //  socket.emit('session:used') restart session on agent
-  //  return null
-  // }
+  if (saved && saved.activationId === activationId) {
+    socket.emit('session:used')
+    return null
+  }
 
   const activation = await Activation.findById(activationId)
 
@@ -44,7 +44,6 @@ const handleSessionStart = async ({ activationId, startAt }, socket, { userId, m
 
   socket.activationId = activationId
 
-  // ttl endAt
   redisClient.set(`session-${activationId}`, JSON.stringify(session))
 
   socket.emit('session:started', { leftTime })
@@ -67,6 +66,15 @@ const handleSessionClose = async (data, socket, { userId }) => {
   await createSession(userId, activationId, clientStartAt, moment(moment()).diff(startAt, 'seconds'))
 
   redisClient.del(`session-${activationId}`)
+  socket.activationId = null
+}
+
+const handleSessionRestore = async ({ activationId }, socket) => {
+  const saved = await loadSession(activationId)
+
+  if (saved && !socket.activationId) {
+    socket.activationId = activationId
+  }
 }
 
 const communicator = async (io, socket) => {
@@ -85,6 +93,7 @@ const communicator = async (io, socket) => {
   if (type === 'agent') {
     socket.on('session:start', data => handleSessionStart(data, socket, { userId, machineId }))
     socket.on('session:stop', data => handleSessionClose(data, socket, { userId, machineId }))
+    socket.on('session:restore', data => handleSessionRestore(data, socket, { userId, machineId }))
     socket.on('disconnect', data => handleSessionClose(data, socket, { userId, machineId }))
   }
 

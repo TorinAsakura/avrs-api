@@ -68,7 +68,6 @@ const schema = `
     country: String,
     sex: String,
     birthday: String,
-    address: String,
     schedule: UserSchedule!,
     inviteCode: String,
     activations: [Activation]!,
@@ -87,6 +86,8 @@ const schema = `
     firstName: String!,
     lastName: String!,
     salesBalance: Float!,
+    country: String!,
+    status: String!,
     createdAt: String!
   }
 
@@ -121,7 +122,7 @@ const schema = `
     percent: Float!,
     package: String!,
     userId: ID!,
-    participantId: ID!
+    participant: NetworkUser!
   }
 
   type Operation {
@@ -189,6 +190,10 @@ const schema = `
     errors: [ValidationError]!
   }
 
+  type ActivationResponse {
+    success: Boolean!
+  }
+
   type ExternalSupportRequestResponse {
     errors: [ValidationError]!,
     request: ExternalSupportRequest
@@ -253,16 +258,16 @@ const schema = `
       phone: String,
       sex: String,
       birthday: String,
-      address: String,
       country: String,
       receiveEmails: Boolean!,
       receiveAnnouncements: Boolean!
     ) : UserResponse!,
 
-    activateUser (token: String!) : TokenResponse,
+    activateUser (token: String!) : ActivationResponse,
     loginUser (email: String!, password: String!) : TokenResponse,
     resetUserPassword (email: String!, resetUrl: String!) : ResetUserPasswordResponse,
     updateUserPassword (password: Password!, token: String!) : TokenResponse,
+    sendActivation (activateUrl: String!) : ActivationResponse,
     storeStat (sessionId: ID!, value: String!) : Boolean,
     buyServicePlan (id: ID!) : ServicePlan!,
     createExternalSupportRequest (email: String!, subject: String!, message: String!) : ExternalSupportRequestResponse,
