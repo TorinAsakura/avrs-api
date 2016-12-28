@@ -26,11 +26,9 @@ const schema = `
     period: Int!,
     time: Int!,
     price: Int!,
-    profitability: Int!,
     profitabilityPerDay: Float!,
     profitabilityPerHour: Float!,
-    profit: Int!,
-    amount: Int!,
+    amount: Float!,
     memory: Int!,
     cpu: Int!
   }
