@@ -9,6 +9,7 @@ export default async function activate(token) {
   }
 
   user.activateToken = null
+  user.status = 'NEW'
 
   await user.save()
 }

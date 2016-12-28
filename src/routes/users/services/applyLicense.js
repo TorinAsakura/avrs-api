@@ -56,9 +56,9 @@ export default async (user, license) => {
     throw Error('License not found')
   }
 
-  if (await Activation.findOne({ where: { license } })) {
-    throw Error('License allready exists')
-  }
+  // if (await Activation.findOne({ where: { license } })) {
+  //  throw Error('License allready exists')
+  // }
 
   const [servicePlan] = config.get('servicePlans').filter(plan => plan.productId === productId)
 

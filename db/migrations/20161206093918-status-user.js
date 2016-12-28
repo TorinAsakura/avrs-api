@@ -3,8 +3,8 @@
 module.exports = {
   up: function (queryInterface, Sequelize) {
     return queryInterface.addColumn('users', 'status', {
-      type: Sequelize.ENUM('NEW', 'ACTIVE', 'INACTIVE'),
-      defaultValue: 'NEW',
+      type: Sequelize.ENUM('NOT_ACTIVATED', 'NEW', 'ACTIVE', 'INACTIVE'),
+      defaultValue: 'NOT_ACTIVATED',
       allowNull: false,
     })
   },

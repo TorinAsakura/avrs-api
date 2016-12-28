@@ -62,8 +62,8 @@ const User = db.define('user', {
     },
   },
   status: {
-    type: Sequelize.ENUM('NEW', 'ACTIVE', 'INACTIVE'), // eslint-disable-line new-cap
-    defaultValue: 'NEW',
+    type: Sequelize.ENUM('NOT_ACTIVATED', 'NEW', 'ACTIVE', 'INACTIVE'), // eslint-disable-line new-cap
+    defaultValue: 'NOT_ACTIVATED',
   },
   isAdmin: {
     type: Sequelize.BOOLEAN,

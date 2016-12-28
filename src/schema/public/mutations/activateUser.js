@@ -1,7 +1,11 @@
 import { activate } from '../../../routes/users/services'
 
 export default async (_, { token }) => {
-  await activate(token)
+  try {
+    await activate(token)
+  } catch (error) {
+    return { success: false }
+  }
 
   return { success: true }
 }
