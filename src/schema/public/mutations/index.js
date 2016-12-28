@@ -3,6 +3,7 @@ import loginUser from './loginUser'
 import activateUser from './activateUser'
 import resetUserPassword from './resetUserPassword'
 import updateUserPassword from './updateUserPassword'
+import sendActivation from './sendActivation'
 import storeStat from './storeStat'
 import buyServicePlan from './buyServicePlan'
 import createExternalSupportRequest from './createExternalSupportRequest'
@@ -21,6 +22,7 @@ export {
   activateUser,
   resetUserPassword,
   updateUserPassword,
+  sendActivation,
   storeStat,
   buyServicePlan,
   createExternalSupportRequest,
