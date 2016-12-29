@@ -6,6 +6,11 @@ import networkDirectReferals from './networkDirectReferals'
 import networkHierarchy from './networkHierarchy'
 import networkReferalStat from './networkReferalStat'
 import supportRequests from './supportRequests'
+import paymentsStat from './paymentsStat'
+import networkStat from './networkStat'
+import rentalOperations from './rentalOperations'
+import referalOperations from './referalOperations'
+import operations from './operations'
 
 export {
   externalSupportRequests,
@@ -16,4 +21,9 @@ export {
   networkHierarchy,
   networkReferalStat,
   supportRequests,
+  paymentsStat,
+  networkStat,
+  rentalOperations,
+  referalOperations,
+  operations,
 }
