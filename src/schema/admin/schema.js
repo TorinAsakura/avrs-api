@@ -19,20 +19,15 @@ const schema = `
   }
 
   type ServicePlan {
-    id: ID!,
     type: String!,
-    name: String!,
+    period: Int!,
     time: Int!,
     price: Int!,
-    period: Int!,
-    profitability: Int!,
     profitabilityPerDay: Float!,
     profitabilityPerHour: Float!,
-    profit: Int!,
-    amount: Int!,
+    amount: Float!,
     memory: Int!,
-    cpu: ServicePlanCpu!,
-    expireAt: String
+    cpu: Int!
   }
 
   type Activation {
@@ -44,12 +39,22 @@ const schema = `
     servicePlan: ServicePlan!
   }
 
+  type Sponsor {
+    id: ID!,
+    firstName: String!,
+    lastName: String!
+  }
+
   type User {
     id: ID!,
     email: String!,
     firstName: String!,
     lastName: String!,
     status: String!,
+    phone: String,
+    country: String,
+    sex: String,
+    birthday: String,
     balance: Float!,
     salesBalance: Float!,
     inviteCode: String,
@@ -57,7 +62,8 @@ const schema = `
     referals: Int!,
     activations: [Activation]!,
     createdAt: String!,
-    children: [User]
+    children: [User],
+    sponsor: Sponsor
   }
 
   type SupportRequestMessage {
@@ -81,6 +87,47 @@ const schema = `
     message: SupportRequestMessage
   }
 
+  type StatValue {
+    date: String!,
+    amount: Float!
+  }
+
+  type PaymentsStat {
+    rental: [StatValue]!,
+    referal: [StatValue]!
+  }
+
+  type NetworkStat {
+    connections: [StatValue]!,
+    activations: [StatValue]!
+  }
+
+  type RentalOperation {
+    id: ID!,
+    date: String!,
+    amount: Float!,
+    package: String!,
+    time: Int!
+  }
+
+  type ReferalOperation {
+    id: ID!,
+    date: String!,
+    amount: Float!,
+    percent: Float!,
+    package: String!,
+    userId: ID!,
+    participant: User!
+  }
+
+  type Operation {
+    id: ID!,
+    date: String!,
+    amount: Float!,
+    status: String!,
+    direction: String!
+  }
+
   type RootQuery {
     externalSupportRequests: [ExternalSupportRequest]!,
     users: [User]!,
@@ -89,7 +136,12 @@ const schema = `
     networkDirectReferals (id: ID!) : [User]!
     networkHierarchy (id: ID!) : [User]!,
     networkReferalStat (id: ID!) : User,
-    supportRequests: [SupportRequest]!
+    supportRequests: [SupportRequest]!,
+    paymentsStat (id: ID!) : PaymentsStat!,
+    networkStat (id: ID!) : NetworkStat!,
+    rentalOperations (id: ID!) : [RentalOperation]!,
+    referalOperations (id: ID!) : [ReferalOperation]!,
+    operations (id: ID!) : [Operation]!
   }
 
   type RootMutation {
