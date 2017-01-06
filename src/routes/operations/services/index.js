@@ -6,6 +6,7 @@ import getOperations from './getOperations'
 import calculateStat from './calculateStat'
 import transfer from './transfer'
 import withdrawToCard from './withdrawToCard'
+import withdrawToBitcoin from './withdrawToBitcoin'
 
 export {
   calculateRental,
@@ -16,4 +17,5 @@ export {
   calculateStat,
   transfer,
   withdrawToCard,
+  withdrawToBitcoin,
 }
