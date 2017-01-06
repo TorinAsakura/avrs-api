@@ -13,6 +13,7 @@ import startActivation from './startActivation'
 import stopActivation from './stopActivation'
 import transfer from './transfer'
 import withdrawToCard from './withdrawToCard'
+import withdrawToBitcoin from './withdrawToBitcoin'
 import userGeneralInformation from './userGeneralInformation'
 import applyLicense from './applyLicense'
 
@@ -32,6 +33,7 @@ export {
   stopActivation,
   transfer,
   withdrawToCard,
+  withdrawToBitcoin,
   userGeneralInformation,
   applyLicense,
 }
