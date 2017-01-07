@@ -277,6 +277,7 @@ const schema = `
     stopActivation (id: ID!) : Activation!,
     transfer (amount: Float!) : Operation!,
     withdrawToCard (amount: Float!, number: String!) : Operation!,
+    withdrawToBitcoin (amount: Float!, number: String!) : Operation!,
     applyLicense (license: String!) : ApplyLicenseResponse!,
   }
 
