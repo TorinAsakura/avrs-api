@@ -68,11 +68,6 @@ export default async (user, license) => {
 
   const activation = await Activation.create({ license, servicePlan, userId: user.id })
 
-  if (user.status === 'NEW') {
-    user.status = 'ACTIVE'
-    await user.save()
-  }
-
   await db.transaction(transaction =>
     Promise.all(
       user.networkPath.map(id =>
