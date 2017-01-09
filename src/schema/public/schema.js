@@ -77,7 +77,9 @@ const schema = `
     referalBalance: Float!,
     referals: Int!,
     createdAt: String!,
-    sponsor: Sponsor
+    sponsor: Sponsor,
+    cardNumber: String,
+    btcAddress: String
   }
 
   type NetworkUser {
@@ -263,6 +265,8 @@ const schema = `
       receiveAnnouncements: Boolean!
     ) : UserResponse!,
 
+    userWithdrawInformation (cardNumber: String, btcAddress: String) : UserResponse!,
+
     activateUser (token: String!) : ActivationResponse,
     loginUser (email: String!, password: String!) : TokenResponse,
     resetUserPassword (email: String!, resetUrl: String!) : ResetUserPasswordResponse,
@@ -276,8 +280,8 @@ const schema = `
     startActivation (id: ID!) : Activation!,
     stopActivation (id: ID!) : Activation!,
     transfer (amount: Float!) : Operation!,
-    withdrawToCard (amount: Float!, number: String!) : Operation!,
-    withdrawToBitcoin (amount: Float!, number: String!) : Operation!,
+    withdrawToCard (amount: Float!) : Operation!,
+    withdrawToBitcoin (amount: Float!) : Operation!,
     applyLicense (license: String!) : ApplyLicenseResponse!,
   }
 

@@ -36,6 +36,12 @@ const User = db.define('user', {
   country: {
     type: Sequelize.STRING,
   },
+  cardNumber: {
+    type: Sequelize.STRING,
+  },
+  btcAddress: {
+    type: Sequelize.STRING,
+  },
   activateToken: {
     type: Sequelize.STRING,
   },

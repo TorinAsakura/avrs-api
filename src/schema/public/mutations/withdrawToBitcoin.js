@@ -1,7 +1,7 @@
 import { withdrawToBitcoin } from '../../../routes/operations/services'
 
-export default async (_, { amount, number }, { checkAuth, user }) => {
+export default async (_, { amount }, { checkAuth, user }) => {
   checkAuth()
 
-  return await withdrawToBitcoin(amount, number, user)
+  return await withdrawToBitcoin(amount, user)
 }
