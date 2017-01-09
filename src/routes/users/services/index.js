@@ -18,6 +18,7 @@ import startActivation from './startActivation'
 import stopActivation from './stopActivation'
 import calculateStat from './calculateStat'
 import updateUserGeneralInformation from './updateUserGeneralInformation'
+import updateUserWithdraw from './updateUserWithdraw'
 import applyLicense from './applyLicense'
 
 export {
@@ -41,5 +42,6 @@ export {
   stopActivation,
   calculateStat,
   updateUserGeneralInformation,
+  updateUserWithdraw,
   applyLicense,
 }

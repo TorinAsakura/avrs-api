@@ -5,6 +5,8 @@ import unique from './validators/unique'
 import exists from './validators/exists'
 import phone from './validators/phone'
 import captcha from './validators/captcha'
+import cardNumber from './validators/cardNumber'
+import walletAddress from './validators/walletAddress'
 import ValidationErrors from '../errors/ValidationErrors'
 
 validator.validators.password = password
@@ -12,6 +14,8 @@ validator.validators.unique = unique
 validator.validators.exists = exists
 validator.validators.phone = phone
 validator.validators.captcha = captcha
+validator.validators.cardNumber = cardNumber
+validator.validators.walletAddress = walletAddress
 
 validator.extend(validator.validators.datetime, {
   parse: value => moment.utc(value),

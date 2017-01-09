@@ -22,6 +22,9 @@ const Operation = db.define('operation', {
     type: Sequelize.ENUM('SENT', 'PERFORMED', 'NOT_PERFORMED'),
     defaultValue: 'SENT',
   },
+  externalType: {
+    type: Sequelize.ENUM('CARD', 'BTC'),
+  },
   data: {
     type: Sequelize.JSONB,
     defaultValue: {},

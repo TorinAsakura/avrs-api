@@ -63,7 +63,9 @@ const schema = `
     activations: [Activation]!,
     createdAt: String!,
     children: [User],
-    sponsor: Sponsor
+    sponsor: Sponsor,
+    cardNumber: String,
+    btcAddress: String
   }
 
   type SupportRequestMessage {
@@ -125,7 +127,9 @@ const schema = `
     date: String!,
     amount: Float!,
     status: String!,
-    direction: String!
+    direction: String!,
+    externalType: String,
+    user: User,
   }
 
   type RootQuery {
@@ -141,7 +145,8 @@ const schema = `
     networkStat (id: ID!) : NetworkStat!,
     rentalOperations (id: ID!) : [RentalOperation]!,
     referalOperations (id: ID!) : [ReferalOperation]!,
-    operations (id: ID!) : [Operation]!
+    operationsHistory (id: ID!) : [Operation]!,
+    operations : [Operation]!
   }
 
   type RootMutation {
@@ -149,6 +154,9 @@ const schema = `
     addAdminPermission (id: ID!): User,
     removeAdminPermission (id: ID!): User,
     sendSupportRequestMessage (requestId: ID!, message: String!) : SupportRequestMessageResponse,
+    confirmOperation (id: ID!) : Operation!,
+    cancelInternalOperation (id: ID!) : Operation!,
+    cancelExternalOperation (id: ID!) : Operation!,
   }
 
   schema {

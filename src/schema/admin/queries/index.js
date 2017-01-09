@@ -10,6 +10,7 @@ import paymentsStat from './paymentsStat'
 import networkStat from './networkStat'
 import rentalOperations from './rentalOperations'
 import referalOperations from './referalOperations'
+import operationsHistory from './operationsHistory'
 import operations from './operations'
 
 export {
@@ -25,5 +26,6 @@ export {
   networkStat,
   rentalOperations,
   referalOperations,
+  operationsHistory,
   operations,
 }
