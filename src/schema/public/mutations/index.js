@@ -15,6 +15,7 @@ import transfer from './transfer'
 import withdrawToCard from './withdrawToCard'
 import withdrawToBitcoin from './withdrawToBitcoin'
 import userGeneralInformation from './userGeneralInformation'
+import userWithdrawInformation from './userWithdrawInformation'
 import applyLicense from './applyLicense'
 
 export {
@@ -35,5 +36,6 @@ export {
   withdrawToCard,
   withdrawToBitcoin,
   userGeneralInformation,
+  userWithdrawInformation,
   applyLicense,
 }

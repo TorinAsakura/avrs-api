@@ -1,7 +1,7 @@
 import { withdrawToCard } from '../../../routes/operations/services'
 
-export default async (_, { amount, number }, { checkAuth, user }) => {
+export default async (_, { amount }, { checkAuth, user }) => {
   checkAuth()
 
-  return await withdrawToCard(amount, number, user)
+  return await withdrawToCard(amount, user)
 }
